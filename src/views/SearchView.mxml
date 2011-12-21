@@ -47,7 +47,6 @@
 			
 			private function search() : void
 			{
-				
 				searchWordInput.appendText( SEPERATOR );
 				searchWordInput.text = searchWordInput.text.split( SEPERATOR ).join( "" );
 				searchWordInput.selectRange( searchWordInput.text.length, searchWordInput.text.length );
@@ -58,8 +57,17 @@
 			
 			private function onSearchLoadComplete( e : Event ) : void
 			{
-				searchResults.source = JSON.decode( _searchLoader.data );
-				detailResults = new ArrayList( new Array( searchResults.length ) );
+				var results : Array = JSON.decode( _searchLoader.data );
+				
+				if( results.length == 0 )
+				{
+					searchResults.source = [{ title: "검색 결과가 없습니다." }];
+					return;
+				}
+				
+				searchResults.source = results;
+				
+				detailResults.source = new Array( searchResults.length );
 			}
 			
 			private function onDataGridSelectionChange( e : GridSelectionEvent ) : void
@@ -83,7 +91,6 @@
 					// 이미 로딩중인 것이 없으면 로드
 					if( _detailLoaderQueue.length == 1 )
 						loadDetail( searchResults.getItemAt( index ).song_id, searchResults.getItemAt( index ).album_id );
-					
 				}
 			}
 			

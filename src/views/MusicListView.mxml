@@ -32,7 +32,7 @@
 	
 	<s:HGroup width="100%">
 		<s:Button id="prevButton" label="prev" />
-		<s:Group width="100%">
+		<s:Group>
 			<s:Button id="playButton" label="play" />
 			<s:Button id="pauseButton" label="pause" visible="false" />
 		</s:Group>
