@@ -2,19 +2,30 @@
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
-					   creationComplete="init()">
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
-	
+					   xmlns:views="views.*"
+					   creationComplete="init()">	
 	<fx:Script>
-		<![CDATA[
-			import com.adobe.serialization.json.JSON;
-			
+		<![CDATA[			
 			private function init() : void
 			{
 				
 			}
 		]]>
 	</fx:Script>
+	
+	<mx:HDividedBox left="10" top="10" right="10" bottom="10">
+		<views:MusicListView width="100%" height="100%" />
+		
+		<mx:VDividedBox width="100%" height="100%">
+			<views:EditView width="100%" height="100%" />
+			
+			<s:VGroup width="100%" height="100%">
+				<views:SearchView width="100%" height="100%" />
+				
+				<s:HGroup width="100%">
+					
+				</s:HGroup>
+			</s:VGroup>
+		</mx:VDividedBox>
+	</mx:HDividedBox>
 </s:WindowedApplication>

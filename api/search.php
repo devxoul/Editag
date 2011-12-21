@@ -6,6 +6,8 @@ $page = $_GET['page'];
 if( !isset( $page ) )
 	$page = 1;
 
+$query = str_replace( ' ', '+', $query );
+
 $url = 'http://m.music.daum.net/search/list?type=song&query='.$query.'&page_no='.$page;
 $html = split( '<div class="wrap_cont">', file_get_contents_curl( $url ) );
 $len = count( $html) - 1;
@@ -39,28 +41,27 @@ function get_title( $src )
 {
 	$title = split( '<strong class="tit">', $src );
 	$title = split( '</strong>', $title[1] );
-	$title = $title[0];
 	
-	if( strpos( $title, "<b>" ) > -1 )
-	{
-		$title = split( '<b>', $title );
-		$title = split( '</b>', $title[1] );
-		return $title[0];
-	}
-	
-	return $title;
+	return remove_bold_tag( $title[0] );
 }
 
 function get_artist( $src )
 {
 	$artist = split( '<span class="txt_info">', $src );
 	$artist = split( '<span class="txt_bar">', $artist[1] );
-	return $artist[0];
+	return remove_bold_tag( $artist[0] );
 }
 
 function get_album( $src )
 {
 	$album = split( '</span>', $src );
 	return $album[2];
+}
+
+function remove_bold_tag( $src )
+{
+	$res = str_replace( '<b>', '', $src );
+	$res = str_replace( '</b>', '', $res );
+	return $res;
 }
 ?>

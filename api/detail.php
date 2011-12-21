@@ -33,8 +33,7 @@ echo urldecode( json_encode( $res ) );
 function get_title( $src )
 {
 	$title = split( '<h4 class="tit">', $src );
-	$title = split( '
-', $title[1] );
+	$title = split( "\r\n", $title[1] );
 	return $title[0];
 }
 
@@ -77,7 +76,10 @@ function get_lyrics( $src )
 {
 	$lyrics = split( '<p class="lyrics">', $src );
 	$lyrics = split( '<br/>', $lyrics[1] );
-	return $lyrics[0];
+	$lyrics = str_replace( "\r\n", '', $lyrics[0] );
+	$lyrics = str_replace( '	', '', $lyrics );
+	$lyrics = str_replace( '<br />', '\n', $lyrics );
+	return $lyrics;
 }
 
 function get_track( $src, $title )

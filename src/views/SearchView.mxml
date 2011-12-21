@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="init()">
+	<s:layout>
+		<s:VerticalLayout />
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			
+			import spark.events.GridSelectionEvent;
+			
+			
+			/** 검색어 입력할 때 추가하고 제거할 아스키코드. */
+			private static const SEPERATOR : String = String.fromCharCode( 16 );
+			
+			private const URL_SEARCH : String = "http://joyfl.kr/xoul/editag/api/search.php";
+			private const URL_DETAIL : String = "http://joyfl.kr/xoul/editag/api/detail.php";
+			
+			private var _searchReq : URLRequest = new URLRequest( URL_SEARCH );
+			private var _detailReq : URLRequest = new URLRequest( URL_DETAIL );
+			private var _albumArtReq : URLRequest = new URLRequest;
+			
+			private var _searchLoader : URLLoader = new URLLoader;
+			private var _detailLoader : URLLoader = new URLLoader;
+			private var _albumArtLoader : Loader = new Loader;
+			
+			[Bindable]
+			private var searchResults : ArrayList = new ArrayList;
+			
+			[Bindable]
+			private var detailResults : ArrayList = new ArrayList;
+			
+			/** row 선택된 순서대로 저장해서 순서대로 로드하는 큐 */
+			private var _detailLoaderQueue : Array = [];
+			
+			
+			private function init() : void
+			{
+				_searchLoader.addEventListener( Event.COMPLETE, onSearchLoadComplete );
+				_detailLoader.addEventListener( Event.COMPLETE, onDetailLoadComplete );
+				_albumArtLoader.contentLoaderInfo.addEventListener( Event.COMPLETE, onAlbumArtLoadComplete );
+			}
+			
+			private function search() : void
+			{
+				
+				searchWordInput.appendText( SEPERATOR );
+				searchWordInput.text = searchWordInput.text.split( SEPERATOR ).join( "" );
+				searchWordInput.selectRange( searchWordInput.text.length, searchWordInput.text.length );
+				
+				_searchReq.data = new URLVariables( "query=" + searchWordInput.text );
+				_searchLoader.load( _searchReq );
+			}
+			
+			private function onSearchLoadComplete( e : Event ) : void
+			{
+				searchResults.source = JSON.decode( _searchLoader.data );
+				detailResults = new ArrayList( new Array( searchResults.length ) );
+			}
+			
+			private function onDataGridSelectionChange( e : GridSelectionEvent ) : void
+			{
+				var index : int = e.selectionChange.rowIndex;
+				
+				// 이미 저장된 데이터가 있으면
+				if( detailResults.getItemAt( index ) )
+				{
+					showDetailAtEditView( index );
+				}
+				
+				// 이미 저장된 데이터가 없으면
+				else
+				{
+					// 큐에 로드 정도 푸시
+					_detailLoaderQueue.push( { index: index,
+												sondId: searchResults.getItemAt( index ).song_id,
+												albumId: searchResults.getItemAt( index ).album_id } );
+					
+					// 이미 로딩중인 것이 없으면 로드
+					if( _detailLoaderQueue.length == 1 )
+						loadDetail( searchResults.getItemAt( index ).song_id, searchResults.getItemAt( index ).album_id );
+					
+				}
+			}
+			
+			private function loadDetail( songId : String, albumId : String ) : void
+			{
+				_detailReq.data = new URLVariables( "song_id=" + songId + "&album_id=" + albumId );
+				_detailLoader.load( _detailReq );
+			}
+			
+			private function onDetailLoadComplete( e : Event ) : void
+			{
+				var detail : Object = JSON.decode( _detailLoader.data );
+				_detailLoaderQueue[0].detail = detail;
+				_albumArtReq.url = detail.cover_url;
+				_albumArtLoader.load( _albumArtReq ); // 앨범아트 로드
+			}
+			
+			private function onAlbumArtLoadComplete( e : Event ) : void
+			{
+				var loadInfo : Object = _detailLoaderQueue.shift();
+				var detail : Object = loadInfo.detail;
+				detail.albumArt = _albumArtLoader.content;
+				
+				// 결과 리스트에 받아온 데이터 추가
+				detailResults.addItemAt( detail, loadInfo.index );
+				
+				// 선택된 인덱스가 바뀌지 않으면 EditView에서 바로 보여줌
+				if( loadInfo.index == searchResultGrid.selectedIndex )
+					showDetailAtEditView( loadInfo.index );
+				
+				// 로드할게 남아있다면
+				if( _detailLoaderQueue.length > 0 )
+					loadDetail( loadInfo.songId, loadInfo.albumId );
+			}
+			
+			private function showDetailAtEditView( index : int ) : void
+			{
+				trace( detailResults.getItemAt( index ).albumArt );
+			}
+		]]>
+	</fx:Script>
+	
+	<s:HGroup width="100%">
+		<s:TextInput id="searchWordInput" width="100%" enter="search()" text="너랑 나" />
+		<s:Button id="searchButton" label="Search" click="search()" />
+	</s:HGroup>
+	
+	<s:DataGrid id="searchResultGrid" width="100%" height="100%" dataProvider="{searchResults}" selectionChange="onDataGridSelectionChange( event )">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="title" headerText="Title" />
+				<s:GridColumn dataField="artist" headerText="Artist" />
+				<s:GridColumn dataField="album" headerText="Album" />
+			</s:ArrayList>
+		</s:columns>
+	</s:DataGrid>
+</s:Group>

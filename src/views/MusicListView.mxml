@@ -1,10 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="init()">
+	
+	<fx:Script>
+		<![CDATA[
+			import modules.MusicPlayer;
+			
+			private var _musicPlayer : MusicPlayer = new MusicPlayer;
+			
+			private function init() : void
+			{
+				initMusicPlayer();
+			}
+			
+			private function initMusicPlayer() : void
+			{
+				_musicPlayer.playButton = playButton;
+				_musicPlayer.pauseButton = pauseButton;
+				_musicPlayer.prevButton = prevButton;
+				_musicPlayer.nextButton = nextButton;
+				_musicPlayer.timeSlider = timeSlider;
+			}
+		]]>
+	</fx:Script>
+	
 	<s:layout>
 		<s:VerticalLayout />
 	</s:layout>
 	
+	<s:HGroup width="100%">
+		<s:Button id="prevButton" label="prev" />
+		<s:Group width="100%">
+			<s:Button id="playButton" label="play" />
+			<s:Button id="pauseButton" label="pause" visible="false" />
+		</s:Group>
+		<s:Button id="nextButton" label="next" />
+		
+		<s:VGroup width="100%">
+			<s:Label id="titleLabel" />
+			<s:HGroup>
+				<s:Label id="currentTimeLabel" text="0:00" />
+				<s:HSlider id="timeSlider" />
+				<s:Label id="totalTimeLabel" text="0:00" />
+			</s:HGroup>
+		</s:VGroup>
+		
+		<s:Button id="openButton" label="open" />
+	</s:HGroup>
 	
+	<s:DataGrid width="100%" height="100%">
+		
+	</s:DataGrid>
 </s:Group>

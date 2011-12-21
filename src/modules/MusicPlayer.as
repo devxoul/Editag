@@ -56,12 +56,12 @@ package modules
 			return _music;
 		}
 		
-		public function set time( time : Sound ) : void
+		public function set time( time : int ) : void
 		{
 			// pause() 코드는 play 함수 안에 구현되어있음.
 			play( time );
 			
-			if( !_playing )
+			if( _playing )
 				pause();
 		}
 		
@@ -89,6 +89,7 @@ package modules
 		
 		public function set playButton( playButton : Sprite ) : void
 		{
+			if( _playButton ) _playButton.removeEventListener( MouseEvent.CLICK, onPlayButtonClick );
 			_playButton = playButton;
 			_playButton.addEventListener( MouseEvent.CLICK, onPlayButtonClick );
 		}
@@ -100,6 +101,7 @@ package modules
 		
 		public function set pauseButton( pauseButton : Sprite ) : void
 		{
+			if( _pauseButton ) _pauseButton.removeEventListener( MouseEvent.CLICK, onPauseButtonClick );
 			_pauseButton = pauseButton;
 			_pauseButton.addEventListener( MouseEvent.CLICK, onPauseButtonClick );
 		}
@@ -111,6 +113,7 @@ package modules
 		
 		public function set stopButton( stopButton : Sprite ) : void
 		{
+			if( _stopButton ) _stopButton.removeEventListener( MouseEvent.CLICK, onStopButtonClick );
 			_stopButton = stopButton;
 			_stopButton.addEventListener( MouseEvent.CLICK, onStopButtonClick );
 		}
@@ -122,6 +125,7 @@ package modules
 		
 		public function set prevButton( prevButton : Sprite ) : void
 		{
+			if( _prevButton ) _prevButton.removeEventListener( MouseEvent.CLICK, onPrevButtonClick );
 			_prevButton = prevButton;
 			_prevButton.addEventListener( MouseEvent.CLICK, onPrevButtonClick );
 		}
@@ -131,8 +135,21 @@ package modules
 			return _prevButton;
 		}
 		
-		public function set timeSlider( timeSlider : Sprite ) : void
+		public function set nextButton( nextButton : Sprite ) : void
 		{
+			if( _nextButton ) _nextButton.removeEventListener( MouseEvent.CLICK, onNextButtonClick );
+			_nextButton = nextButton;
+			_nextButton.addEventListener( MouseEvent.CLICK, onNextButtonClick );
+		}
+		
+		public function get nextButton() : Sprite
+		{
+			return _nextButton;
+		}
+		
+		public function set timeSlider( timeSlider : Range ) : void
+		{
+			if( _timeSlider ) _timeSlider.removeEventListener( Event.CHANGE, onTimeSliderValueChange );
 			_timeSlider = timeSlider;
 			_timeSlider.addEventListener( Event.CHANGE, onTimeSliderValueChange );
 		}
@@ -142,15 +159,16 @@ package modules
 			return _timeSlider;
 		}
 		
-		public function set volumeSlider( volumeSlider : Sprite ) : void
+		public function set volumeSlider( volumeSlider : Range ) : void
 		{
+			if( _volumeSlider ) _timeSlider.removeEventListener( Event.CHANGE, onVolumeSliderValueChange );
 			_volumeSlider = volumeSlider;
 			_volumeSlider.addEventListener( Event.CHANGE, onVolumeSliderValueChange );
 		}
 		
-		public function get stopButton() : Range
+		public function get volumeSlider() : Range
 		{
-			return _stopButton;
+			return _volumeSlider;
 		}
 		
 		
@@ -168,7 +186,7 @@ package modules
 		public function play( time : int = 0 ) : void
 		{
 			if( _playing ) pause();
-			_channel = _music.play( _time = time );
+			_channel = _music.play( time );
 		}
 		
 		/**
@@ -177,7 +195,6 @@ package modules
 		public function pause() : void
 		{
 			_channel.stop();
-			_time = _channel.position;
 		}
 		
 		/**
@@ -186,7 +203,6 @@ package modules
 		public function stop() : void
 		{
 			pause();
-			_time = 0;
 		}
 		
 		/**
