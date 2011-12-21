@@ -62,4 +62,4 @@
 	url += "&image_path=http://m1.daumcdn.net/cfile2/C94x94/205A124F4ED433CC1675A8";
 
 앨범 커버 이미지 (아이유 2집 Last Fantasy)
-	http://i1.daumcdn.net/cfile2/S200x200/205A124F4ED433CC1675A8
+	http://cfile39.uf.daum.net/image/140467414ED6DAA51F3421
