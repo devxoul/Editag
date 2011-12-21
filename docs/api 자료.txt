@@ -1,0 +1,65 @@
+검색 결과 (너랑 나) v
+	http://m.music.daum.net/search/list?type=song&query=너랑+나
+
+곡 번호 (9036125) v
+	검색 결과 소스
+	<div id="sId_9036125" class="audio"></div>
+	에서 추출 가능할 듯
+
+앨범 번호 (585853) v
+	<a href="/album/main?album_id=585853" class="bround btn_album">
+
+제목 (너랑 나) - 단축버전 v
+	검색 결과 소스
+	<strong class="tit"><b>너랑 나</b></strong>
+	에서 추출 가능할 듯
+
+아티스트 (아이유), 앨범 제목 (2집 Last Fantasy) - 단축버전 v
+	검색 결과 소스
+	<span class="txt_info">아이유<span class="txt_bar"> | </span>2집 Last Fantasy</span>
+	에서 추출 가능할 듯
+
+앨범 정보 페이지
+	http://m.music.daum.net/album/main?album_id=585853
+
+발매 연도 (2011)
+	앨범 정보 페이지
+	<dt class="tit_base">발매정보</dt>
+		<dd class="desc">2011.11.29</dd>
+	에서 추출 가능할 듯
+
+트랙 (4)
+	앨범 정보 페이지
+	<div class="wrap_cont">
+	<a href="javascript:;" class="wrap_folding">
+	<span class="num_rank">4</span>
+	<span class="info">
+	<span class="wrap_song"> 
+	<strong class="tit">너랑 나</strong>
+	</span>
+	<span class="txt_info">아이유</span>
+	</span>
+	<span class="bround btn_fold">
+	<span class="ico_music ico_fold">펼치기/접기</span>
+	</span>
+	</a>
+	<a class="bround btn_listen " title="곡 듣기"  href="javascript:;" onclick="music.mobile.mMusicPlay.playSample('9036125','','close');">
+	<span class="ico_music ico_listen">듣기</span>
+	</a>
+	</div>
+	에서 추출 가능할 듯
+
+마지막 트랙 번호 (13)
+	앨범 정보 페이지
+	<span class="num_rank">
+	개수로 알 수 있을 듯
+
+가사, 노래 제목, 아티스트, 작사, 작곡, 편곡
+	http://m.music.daum.net/song/vcliplyrics?song_id=9036125
+
+앨범 커버 이미지 구분자 (205A124F4ED433CC1675A8)
+	앨범 정보 페이지
+	url += "&image_path=http://m1.daumcdn.net/cfile2/C94x94/205A124F4ED433CC1675A8";
+
+앨범 커버 이미지 (아이유 2집 Last Fantasy)
+	http://i1.daumcdn.net/cfile2/S200x200/205A124F4ED433CC1675A8
